@@ -56,8 +56,6 @@ public event_count()
 {
     gRoundTime--
 
-    client_print(0, print_chat, "time left: %d", gRoundTime)
-
     message_begin(MSG_BROADCAST, gMsgRoundTime)
     {
         write_short(gRoundTime+1)
@@ -84,19 +82,11 @@ public roundEnd(type)
 
     remove_task(TASKCOUNT)
 
-    for(new i = 1; i <= gMaxPlayers; i++)
-    {
-        if(!is_user_connected(i))
-            continue
-        
-        client_print(i, print_chat, "roundEnd")
-    }
-
     rg_balance_teams()
 
     ExecuteForward(gForwardRoundEndPost, retValue, type)
 
-    set_task(8.0, "roundRespawn")
+    set_task(1.5, "roundRespawn")
 }
 
 public roundRespawn()
@@ -106,25 +96,16 @@ public roundRespawn()
         if(!is_user_connected(i))
             continue
         
-        client_print(i, print_chat, "roundRespawn")
         rg_round_respawn(i)
     }
     
     ExecuteForward(gForwardRoundRespawn, retValue)
 
-    set_task(8.0, "roundStart")
+    set_task(1.0, "roundStart")
 }
 
 public roundStart()
 {
-    for(new i = 1; i <= gMaxPlayers; i++)
-    {
-        if(!is_user_connected(i))
-            continue
-        
-        client_print(i, print_chat, "roundStart")
-    }
-
     gRoundActive = true
     gRoundTime = gDefRoundTime
 
